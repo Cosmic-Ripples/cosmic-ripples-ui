@@ -1,7 +1,9 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Box, Stack, Grid, Typography } from '@mui/material';
+
+import Soren from '../../../api_interface/API_Interface';
 
 import {
     PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
@@ -33,7 +35,7 @@ function AlbumTile(props) {
         artistID,
         artistName,
         year,
-        image,
+        // image,
         playtime,
         dispatch,
     } = props;
@@ -44,10 +46,23 @@ function AlbumTile(props) {
         >•</Box>
     );
 
-    // console.log('\n\n\n');
-    // console.log(`albumID: ${albumID}`);
-    // console.log(`albumName: ${albumName}`);
-    // console.log('\n\n\n');
+    const [albumCoverArt, setAlbumCoverArt] = React.useState({});  /* temp */
+
+    useEffect(() => {
+        async function getAlbumCoverArt() {
+
+            const api = new Soren();
+            const albumsJSONString = await api.albumCoverArt(albumID);
+
+            // Object.keys(albumsJSONString).forEach((key) => {
+            //     console.log(`${key}: ${albumsJSONString[key]}`);
+            // });
+
+            setAlbumCoverArt(albumsJSONString.data);
+        }
+
+        getAlbumCoverArt();
+    }, [albumID]);
 
     return (
         <Stack
@@ -97,18 +112,22 @@ function AlbumTile(props) {
                         justifyContent: 'flex-start',
                         alignItems: 'flex-start',
                         // backgroundImage: `url(${'https://material-ui.com/static/images/cards/contemplative-reptile.jpg'})`,
-                        backgroundImage: `url(${TychoImage})`,
+                        // backgroundImage: `url(${image})`,
+                        // backgroundImage: `url(${albumCoverArt})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                     }}
                 >
-                    {/* <img
-                        src={TychoImage}
-                        alt='album cover'
-                        display='inline-block'
-                        height='150'
-                        width='150'
-                    /> */}
+                    {albumCoverArt && (
+                        <img // for testing, should use 'backgroundImage'
+                            // src={image}
+                            src={albumCoverArt}
+                            alt='album cover'
+                            display='inline-block'
+                            height='150'
+                            width='150'
+                        />
+                    )}
                 </Box>
             </Box>
             <Stack
@@ -165,6 +184,10 @@ function AlbumTile(props) {
 export default function AlbumsGrid(props) {
     const { artistName, albums, dispatch } = props;
 
+    const { test_API_image } = props;
+
+
+
     return (
         <Box
             sx={{
@@ -201,7 +224,8 @@ export default function AlbumsGrid(props) {
                             artistName={artistName ? artistName : album['Artist_Name']}
                             year={album['Year']}
                             playtime={album['Playtime']}
-                            image={TychoImage}
+                            // image={TychoImage}
+                            image={test_API_image}
                             dispatch={dispatch}
                         />
                     </Grid>

@@ -41,4 +41,16 @@ export default class APIInterface {
             ));
     }
 
+    async albumCoverArt(albumID) {
+        return axiosAgent.get(`metadata/album/cover/${albumID}`)
+            // .then(coverArt => coverArt.data)
+            .then(coverArt => coverArt)
+            .catch(error => (
+                {
+                    error,
+                    coverArt: undefined,
+                }
+            ));
+    }
+
 }
