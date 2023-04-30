@@ -157,8 +157,14 @@ export default function ArtistView(props) {
             dispatch(get_albums_by_artist(artistID, artists));
         }
 
+        /* TODO: Toss in the album art here ? */
         getAlbums();
+
     }, [artistID, artists, dispatch]);
+
+    /* Get Artist Image (here or in ArtistHeader */
+
+    /* If not get album art in above useEffect, get here and add to albums */
 
     return (
         <Box

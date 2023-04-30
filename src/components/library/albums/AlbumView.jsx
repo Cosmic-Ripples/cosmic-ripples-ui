@@ -165,6 +165,11 @@ export default function AlbumView(props) {
     //     getTracks();
     // }, [albumID, artists, dispatch]);
 
+    const getTracksByAlbum = (albumID) => {
+        const album = tracks?.filter((track) => track.Album_ID === albumID);
+        return album;
+    };
+
     return (
         <Box
             sx={{
@@ -183,8 +188,8 @@ export default function AlbumView(props) {
                     backgroundColor: SECONDARY_COLOR,
                 }}
             >
-                <TracksTable tracks={tracks}
-                    albumID={albumID}
+                <TracksTable
+                    tracks={getTracksByAlbum(albumID)}
                     artists={artists}
                     dispatch={dispatch}
                 />
