@@ -145,25 +145,15 @@ function AlbumHeader(props) {
 export default function AlbumView(props) {
     const { albumName, albumID, artists, tracks, dispatch } = props;
 
-    // useEffect(() => {
-    //     const api = new Soren();
+    // setNewQueueAndPlayCallBack
 
-    //     async function getArtists() {
-    //         const artistsJSONString = await api.allArtists();
+    useEffect(() => {
+        async function getTracks() {
+            dispatch(get_tracks_by_album(albumID, artists));
+        }
 
-    //         dispatch(setArtists(artistsJSONString.data));
-    //     }
-
-    //     getArtists();
-    // }, [artists, dispatch]);
-
-    // useEffect(() => {
-    //     async function getTracks() {
-    //         dispatch(get_tracks_by_album(albumID, artists));
-    //     }
-
-    //     getTracks();
-    // }, [albumID, artists, dispatch]);
+        getTracks();
+    }, [albumID, artists, dispatch]);
 
     const getTracksByAlbum = (albumID) => {
         const album = tracks?.filter((track) => track.Album_ID === albumID);

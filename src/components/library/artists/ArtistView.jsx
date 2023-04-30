@@ -152,6 +152,8 @@ function ArtistHeader(props) {
 export default function ArtistView(props) {
     const { artistName, artistID, artists, albums, dispatch } = props;
 
+    // setNewQueueAndPlayCallBack
+
     useEffect(() => {
         async function getAlbums() {
             dispatch(get_albums_by_artist(artistID, artists));

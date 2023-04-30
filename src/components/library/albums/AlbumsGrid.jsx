@@ -1,17 +1,13 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Box, Stack, Grid, Typography } from '@mui/material';
-
-import Soren from '../../../api_interface/API_Interface';
 
 import {
     PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
 } from '../../../config/color_palette';
 
 import { click_on_album_grid_item } from '../../../actions';
-
-import TychoImage from '../../../sample_images/tycho.png';
 
 
 const ALBUM_TILE_SIZE = 250; /* tmp */
@@ -35,7 +31,6 @@ function AlbumTile(props) {
         artistID,
         artistName,
         year,
-        // image,
         playtime,
         dispatch,
     } = props;
@@ -46,23 +41,7 @@ function AlbumTile(props) {
         >•</Box>
     );
 
-    const [albumCoverArt, setAlbumCoverArt] = React.useState({});  /* temp */
-
-    useEffect(() => {
-        async function getAlbumCoverArt() {
-
-            const api = new Soren();
-            const albumsJSONString = await api.albumCoverArt(albumID);
-
-            // Object.keys(albumsJSONString).forEach((key) => {
-            //     console.log(`${key}: ${albumsJSONString[key]}`);
-            // });
-
-            setAlbumCoverArt(albumsJSONString.data);
-        }
-
-        getAlbumCoverArt();
-    }, [albumID]);
+    const yes = `http://localhost:8065/api/v1/metadata/album/cover/${albumID}`
 
     return (
         <Stack
@@ -92,16 +71,6 @@ function AlbumTile(props) {
                     mt: 1,
                 }}
             >
-                {/* <img
-                    src="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
-                    alt="green iguana"
-                /> */}
-                {/* <img
-                    src={TychoImage}
-                    alt='Tycho'
-                    width='100%'
-                    height='auto'
-                /> */}
                 <Box
                     sx={{
                         width: '100%',
@@ -111,23 +80,21 @@ function AlbumTile(props) {
                         display: 'flex',
                         justifyContent: 'flex-start',
                         alignItems: 'flex-start',
-                        // backgroundImage: `url(${'https://material-ui.com/static/images/cards/contemplative-reptile.jpg'})`,
-                        // backgroundImage: `url(${image})`,
-                        // backgroundImage: `url(${albumCoverArt})`,
+                        backgroundImage: `url(${yes})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                     }}
                 >
-                    {albumCoverArt && (
-                        <img // for testing, should use 'backgroundImage'
-                            // src={image}
-                            src={albumCoverArt}
+                    {/* {yes && (
+                        <img
+                            // src={TychoImage}
+                            src={yes}
                             alt='album cover'
                             display='inline-block'
                             height='150'
                             width='150'
                         />
-                    )}
+                    )} */}
                 </Box>
             </Box>
             <Stack

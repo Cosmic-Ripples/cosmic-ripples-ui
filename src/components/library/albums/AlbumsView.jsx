@@ -28,12 +28,14 @@ import { setAlbums, setArtists } from '../../../actions';
 export default function AlbumsView(props) {
     const { selectedAlbum, artists, albums, tracks, dispatch } = props;
 
-    const checkSanity = false;
 
     useEffect(() => {
-        checkSanity && console.log('\n\ncalled useEffect');
+        const checkSanity = false;
+        checkSanity && console.log('called useEffect');
+
         async function getAlbums() {
-            checkSanity && console.log('\n\ncalled async getAlbums()');
+            checkSanity && console.log('called async getAlbums()');
+
             const api = new Soren();
             const artistsJSONString = await api.allArtists();
             dispatch(setArtists(artistsJSONString.data));
@@ -66,11 +68,7 @@ export default function AlbumsView(props) {
                 dispatch={dispatch}
             />
         ) : (
-            <Albums
-                albums={albums}
-                dispatch={dispatch}
-            // test_API_image={albumCoverArt}  /* temp */
-            />
+            <Albums albums={albums} dispatch={dispatch} />
         )
     );
 }
