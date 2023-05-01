@@ -390,8 +390,8 @@ export default function PlayBar(props) {
         currentTrackInfo
     } = props;
 
-    const title = currentTrackInfo.trackTitle;
-    const artist = currentTrackInfo.artistName;
+    const title = currentTrackInfo.title;
+    const artist = currentTrackInfo.artist;
 
     return (
         <Stack aria-label='playbar'
