@@ -201,7 +201,7 @@ export default function TracksTable(props) {
 
     const setQueueHead = (trackID) => {
         console.log('This function can set the head of the queue ?');
-    }
+    };
 
     return (
         <TableContainer component={Paper} sx={{ borderRadius: 5 }} >

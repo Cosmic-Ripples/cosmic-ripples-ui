@@ -6,26 +6,23 @@ import React, { useEffect } from 'react';
 
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 
-import Soren from '../../../api_interface/API_Interface';
-
 import { PlayCircle } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import TychoImage from '../../../sample_images/tycho.png';
+
+import TracksTable from '../tracks/TracksTable';
+
+import { get_tracks_by_album, revisit_albums_view } from '../../../actions';
+
+import { getAlbumArt } from '../../../config/album_art_paths';
 
 import {
     PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
 } from '../../../config/color_palette';
 
-import TracksTable from '../tracks/TracksTable';
-
-import {
-    setArtists, get_tracks_by_album, revisit_albums_view,
-} from '../../../actions';
-
 
 function AlbumHeader(props) {
-    const { albumName, dispatch } = props;
+    const { albumName, albumID, dispatch } = props;
 
     return (
         <Stack direction='row'
@@ -59,20 +56,11 @@ function AlbumHeader(props) {
                         display: 'flex',
                         justifyContent: 'flex-start',
                         alignItems: 'flex-start',
-                        backgroundImage: `url(${TychoImage})`,
+                        backgroundImage: `url(${getAlbumArt(albumID)})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                     }}
-                >
-
-                    {/* <img
-                        src={TychoImage}
-                        alt='album cover'
-                        display='inline-block'
-                        height='150'
-                        width='150'
-                    /> */}
-                </Box>
+                />
             </Stack>
             <Stack
                 sx={{
@@ -168,7 +156,9 @@ export default function AlbumView(props) {
                 pb: 4,
             }}
         >
-            <AlbumHeader albumName={albumName} dispatch={dispatch} />
+            <AlbumHeader albumName={albumName} albumID={albumID}
+                dispatch={dispatch}
+            />
             <Box
                 sx={{
                     height: '70%',

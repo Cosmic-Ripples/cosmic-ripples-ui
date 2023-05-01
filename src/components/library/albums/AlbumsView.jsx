@@ -28,9 +28,8 @@ import { setAlbums, setArtists } from '../../../actions';
 export default function AlbumsView(props) {
     const { selectedAlbum, artists, albums, tracks, dispatch } = props;
 
-
     useEffect(() => {
-        const checkSanity = false;
+        const checkSanity = true;
         checkSanity && console.log('called useEffect');
 
         async function getAlbums() {
@@ -50,7 +49,7 @@ export default function AlbumsView(props) {
         }
 
         if (!artists || !albums) {
-            getAlbums();
+        getAlbums();
         }
     }, [artists, albums, dispatch]);
 
@@ -61,7 +60,8 @@ export default function AlbumsView(props) {
 
     return (
         selectedAlbum ? (
-            <AlbumView albumID={selectedAlbum}
+            <AlbumView
+                albumID={selectedAlbum}
                 albumName={getAlbumName(selectedAlbum)}
                 artists={artists}
                 tracks={tracks}
