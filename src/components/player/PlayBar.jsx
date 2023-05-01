@@ -13,7 +13,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
 import {
     playerButtonStyle,
-    SkipBackButton, PlayOrPauseButton, SkipForwardButton,
+    SkipBackButton, PlayOrPauseButton, SkipForwardButton, RewindButton, FastForwardButton
 } from './PlayBackButtons';
 
 import {
@@ -107,6 +107,8 @@ function CurrentTrackInfo(props) {
  * @param {function} props.playOrPauseAudio callback function to play or
  * pause the audio.
  * @param {boolean} props.paused whether the audio is paused or not.
+ * @param {function} props.skipPlayback callback function that skips the
+ * playback of the current track by a given number of seconds.
  * @returns {JSX.Element} A Stack of playback control buttons.
  */
 function PlayBackControlButtons(props) {
@@ -115,6 +117,7 @@ function PlayBackControlButtons(props) {
         playOrPauseAudio,
         skipBack,
         skipForward,
+        skipPlayback
     } = props;
 
     return (
@@ -129,12 +132,14 @@ function PlayBackControlButtons(props) {
                 borderColor: 'green',
             }}
         >
+            <RewindButton skipPlayback={skipPlayback} />
             <SkipBackButton skipBack={skipBack} />
             <PlayOrPauseButton
                 paused={paused}
                 playOrPauseAudio={playOrPauseAudio}
             />
             <SkipForwardButton skipForward={skipForward} />
+            <FastForwardButton skipPlayback={skipPlayback} />
         </Stack>
     );
 }
@@ -203,6 +208,8 @@ function PlayHead(props) {
  * position of the playhead.
  * @param {number} props.currentTime the current time of the audio player.
  * @param {number} props.duration the duration of the audio player.
+ * @param {function} props.skipPlayback callback function that skips the
+ * playback of the current track by a given number of seconds.
  * @returns {JSX.Element}
  * A vertical Stack of Playback Control Buttons and the PlayHead.
  */
@@ -215,6 +222,7 @@ function PlayBackControls(props) {
         movePlayPosition,
         currentTime,
         duration,
+        skipPlayback
     } = props;
 
     return (
@@ -235,6 +243,7 @@ function PlayBackControls(props) {
                 paused={paused}
                 skipBack={skipBack}
                 skipForward={skipForward}
+                skipPlayback={skipPlayback}
             />
             <PlayHead
                 movePlayPosition={movePlayPosition}
