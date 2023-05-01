@@ -44,36 +44,44 @@ export default function App() {
         //https://stackoverflow.com/questions/64474338/audio-player-returns-uncaught-in-promise-domexception-the-element-has-no-su
         audioPlayer.crossOrigin = "anonymous";
 
+
+        // Preferred old names:
+        // trackTitle
+        // albumTitle
+        // artistName
+        // trackID
+
+
         setQueue([
             {
-                trackTitle: 'Greetings',
-                albumTitle: 'Achievement',
-                artistName: 'pilotredsun',
-                fileLocation: 'greetings.mp3'
+                title: 'Greetings',
+                album: 'Achievement',
+                artist: 'pilotredsun',
+                ID: '3235'
             },
             {
-                trackTitle: 'Blueberry Hill Single Version',
-                albumTitle: "Louis Armstrong's Greatest Hits",
-                artistName: 'Louis Armstrong',
-                fileLocation: '17_Blueberry_Hill_Single_Version.m4a'
+                title: 'Blueberry Hill Single Version',
+                album: "Louis Armstrong's Greatest Hits",
+                artist: 'Louis Armstrong',
+                ID: '3207'
             },
             {
-                trackTitle: 'Red Moon - For Storm Station Act 3',
-                albumTitle: 'Sonic After the Sequel Original Sound Track',
-                artistName: 'Funk Fiction',
-                fileLocation: 'Red_Moon.mp3'
+                title: 'Red Moon - For Storm Station Act 3',
+                album: 'Sonic After the Sequel Original Sound Track',
+                artist: 'Funk Fiction',
+                ID: '3223'
             },
             {
-                trackTitle: 'Cyclic',
-                albumTitle: 'Album',
-                artistName: 'FreakyBro',
-                fileLocation: 'FreakyBro-Cyclic.flac'
+                title: 'Cyclic',
+                album: 'Album',
+                artist: 'FreakyBro',
+                ID: '3216'
             }
         ]);
 
         setQueueHeadIdx(0);
 
-        audioPlayer.src = apiPlayCallString + 'greetings.mp3';
+        audioPlayer.src = apiPlayCallString + '3235';
 
         /*
         audioPlayer.ontimeupdate = function () {
@@ -119,7 +127,7 @@ export default function App() {
     audioPlayer.onended = function () {
         if (queueHeadIdx !== queue.length - 1) {
             console.log(queue);
-            audioPlayer.src = apiPlayCallString + queue[queueHeadIdx + 1].fileLocation;
+            audioPlayer.src = apiPlayCallString + queue[queueHeadIdx + 1].ID;
             audioPlayer.play();
             setCurrentTime(audioPlayer.currentTime);
             setQueueHeadIdx(currIdx => ++currIdx);
@@ -157,7 +165,7 @@ export default function App() {
 
     const skipBack = () => {
         if (Math.floor(audioPlayer.currentTime) < 3 && queueHeadIdx !== 0) {
-            audioPlayer.src = apiPlayCallString + queue[queueHeadIdx - 1].fileLocation;
+            audioPlayer.src = apiPlayCallString + queue[queueHeadIdx - 1].ID;
             if (!paused) {
                 audioPlayer.play();
             }
@@ -177,7 +185,7 @@ export default function App() {
             setCurrentTime(audioPlayer.currentTime);
         }
         else {
-            audioPlayer.src = apiPlayCallString + queue[queueHeadIdx + 1].fileLocation;
+            audioPlayer.src = apiPlayCallString + queue[queueHeadIdx + 1].ID;
             if (!paused) {
                 audioPlayer.play();
             }
@@ -204,12 +212,14 @@ export default function App() {
         console.log('newQueueTracksInfo at newQueueHead:');
         console.table(newQueueTracksInfo[newQueueHead]);
 
+        console.log('here is the new queue: ', newQueueTracksInfo);
+
         /* TODO: Figure out a way to add in everything that isn't already in
         the queue. */
 
         setQueue(newQueueTracksInfo);
         setQueueHeadIdx(newQueueHead);
-        audioPlayer.src = apiPlayCallString + newQueueTracksInfo[newQueueHead].Path;
+        audioPlayer.src = apiPlayCallString + newQueueTracksInfo[newQueueHead].ID;
         audioPlayer.play();
         setCurrentTime(audioPlayer.currentTime);
     }

@@ -206,4 +206,6 @@ export {
     PauseButton,
     SkipBackButton,
     SkipForwardButton,
+    RewindButton,
+    FastForwardButton
 };
