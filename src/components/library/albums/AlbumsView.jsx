@@ -29,36 +29,39 @@ export default function AlbumsView(props) {
     const { selectedAlbum, artists, albums, tracks, dispatch } = props;
 
     useEffect(() => {
+        const checkSanity = true;
+        checkSanity && console.log('called useEffect');
 
         async function getAlbums() {
+            checkSanity && console.log('called async getAlbums()');
+
             const api = new Soren();
-
             const artistsJSONString = await api.allArtists();
-
-            // console.log(`artists from the DB ${JSON.stringify(artistsJSONString)}`);
-            // console.log(`artistsJSONString.data ${JSON.stringify(artistsJSONString.data)}`);
-
             dispatch(setArtists(artistsJSONString.data));
 
-            dispatch(setAlbums(artists));
+            /*
+            Only using 'artists' for debugging...
+            Note that using 'artists' will result in a loop (closure ?) on
+            artists and dispatch, causing useEffect to endlessly call the API.
+            */
+            // dispatch(setAlbums(artists));
+            dispatch(setAlbums(artistsJSONString.data));
         }
 
+        if (!artists || !albums) {
         getAlbums();
-    }, [artists, dispatch]);
+        }
+    }, [artists, albums, dispatch]);
 
     const getAlbumName = (albumID) => {
-        // console.log(`looking for album: ${albumID} in...`);
-        // albums?.forEach((album) => {
-        //     console.log(`album: ${album['ID']} ${album['Name']}`);
-        // });
         const album = albums?.find((album) => album['ID'] === albumID);
-        // console.log(`found album: ${album['Title']}`);
-        return album['Title'];
+        return album.Title;
     };
 
     return (
         selectedAlbum ? (
-            <AlbumView albumID={selectedAlbum}
+            <AlbumView
+                albumID={selectedAlbum}
                 albumName={getAlbumName(selectedAlbum)}
                 artists={artists}
                 tracks={tracks}

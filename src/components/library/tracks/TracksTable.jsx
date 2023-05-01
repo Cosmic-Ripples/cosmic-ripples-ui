@@ -4,7 +4,7 @@
  * component.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import {
     Typography, Paper, IconButton,
@@ -17,8 +17,6 @@ import {
 
 import { PlayCircle } from '@mui/icons-material';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
-
-import { setTracks, get_tracks_by_album } from '../../../actions';
 
 
 /**
@@ -197,36 +195,13 @@ function TrackIndicator(props) {
  * @returns {JSX.Element} A table of tracks.
  */
 export default function TracksTable(props) {
-    const {
-        tracks, dispatch,
-        albumID, artists,
-    } = props;
-
-    useEffect(() => {
-        async function getAllTracks() {
-            dispatch(setTracks());
-        }
-
-        async function getTracksByAlbum() {
-            dispatch(get_tracks_by_album(albumID, artists));
-        }
-
-        albumID ? getTracksByAlbum() : getAllTracks();
-    }, [albumID, artists, dispatch]);
-
-    // useEffect(() => {
-    //     async function getTracksByAlbum() {
-    //         dispatch(get_tracks_by_album(albumID, artists));
-    //     }
-
-    //     getTracksByAlbum();
-    // }, [albumID, artists, dispatch]);
+    const { tracks } = props;
 
     const quickDirtyStyle = { fontWeight: 'bold', color: TERTIARY_COLOR };
 
     const setQueueHead = (trackID) => {
         console.log('This function can set the head of the queue ?');
-    }
+    };
 
     return (
         <TableContainer component={Paper} sx={{ borderRadius: 5 }} >
@@ -283,7 +258,6 @@ export default function TracksTable(props) {
                                 {track.isPlaying ? (
                                     <PauseButton pauseAudio={() => console.log('PAUSE')} />
                                 ) : (
-                                    // <TrackIndicator idx={idx} onClickCallBack={() => console.log('SET QUEUE HEAD IDX ?')} />
                                     <TrackIndicator idx={idx} onClickCallBack={() => setQueueHead('trackID')} />
                                     // <TrackIndicator idx={idx} hovered={hovered} />
                                 )}
@@ -292,7 +266,7 @@ export default function TracksTable(props) {
                                 <Typography component='div' variant='h7'
                                     sx={{ ...quickDirtyStyle }}
                                 >
-                                    {track.title}
+                                    {track.Title}
                                 </Typography>
                             </TableCell>
                             <TableCell align='right'>
@@ -313,7 +287,7 @@ export default function TracksTable(props) {
                                 <Typography component='div' variant='h7'
                                     sx={{ ...quickDirtyStyle }}
                                 >
-                                    {track.duration}
+                                    {track.Length}
                                 </Typography>
                             </TableCell>
                             <TableCell align='right'>

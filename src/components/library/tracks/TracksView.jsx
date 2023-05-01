@@ -120,8 +120,6 @@ function TracksHeader(props) {
  * 
  * */
 export default function TracksView(props) {
-    console.log('TracksView');
-
     const {
         tracks,
         artists,
@@ -135,10 +133,6 @@ export default function TracksView(props) {
 
         async function getArtists() {
             const artistsJSONString = await api.allArtists();
-
-            // console.log(`artists from the DB ${JSON.stringify(artistsJSONString)}`);
-            // console.log(`artistsJSONString.data ${JSON.stringify(artistsJSONString.data)}`);
-
             dispatch(setArtists(artistsJSONString.data));
         }
 

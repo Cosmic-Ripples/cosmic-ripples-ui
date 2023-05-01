@@ -7,11 +7,14 @@
 function initialState() {
     return {
         open: false,
-        isPlaying: false,
+
         audio: null,
+        isPlaying: false,
+
         artists: null,
         albums: null,
         tracks: null,
+
         selectedMenuItem: 'Default View',
         selectedAlbum: null,
         selectedArtist: null,

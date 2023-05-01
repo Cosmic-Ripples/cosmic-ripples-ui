@@ -5,18 +5,19 @@
 import axios from 'axios';
 
 const AxiosConfigured = () => {
-    // Indicate to the API that all requests for this app are AJAX
+    /* Indicate to the API that all requests for this app are AJAX */
     axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-    // Set the baseURL for all requests to the API domain instead of the current domain
+    /* Set the baseURL for all requests to the API domain instead of the
+    current domain */
     // axios.defaults.baseURL = `http://localhost:8443/api/v1`;
 
     /* yes */
     axios.defaults.baseURL = `http://localhost:8065/api/v1`;
 
-    // Allow browser to send cookies to the API domain (which include auth_token)
+    /* Allow browser to send cookies to the API domain
+    (which include auth_token) */
     axios.defaults.withCredentials = true;
-
 
     // axios.defaults.headers.common['X-CSRF-TOKEN'] = csrf_token;
 
@@ -37,6 +38,30 @@ export default class APIInterface {
                 {
                     error,
                     artists: undefined,
+                }
+            ));
+    }
+
+    async albumCoverArt(albumID) {
+        return axiosAgent.get(`metadata/album/cover/${albumID}`)
+            // .then(coverArt => coverArt.data)
+            .then(coverArt => coverArt)
+            .catch(error => (
+                {
+                    error,
+                    coverArt: undefined,
+                }
+            ));
+    }
+
+    async trackPaths() {
+        return axiosAgent.get(`metadata/track/paths`)
+            // .then(coverArt => coverArt.data)
+            .then(trackPaths => trackPaths)
+            .catch(error => (
+                {
+                    error,
+                    coverArt: undefined,
                 }
             ));
     }

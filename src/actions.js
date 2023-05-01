@@ -45,10 +45,10 @@ export function setTracks(artists) {
             album['Tracks'].forEach(track => {
                 allTracks.push({
                     ...track,
-                    title: track['Title'],
+                    // title: track['Title'],
                     artist: artist['Name'],
                     album: album['Title'],
-                    duration: track['Length'],
+                    // duration: track['Length'],
                     // more track data ...
                 });
             });

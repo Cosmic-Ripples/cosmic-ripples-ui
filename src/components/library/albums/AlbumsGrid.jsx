@@ -3,13 +3,13 @@ import React from 'react';
 
 import { Box, Stack, Grid, Typography } from '@mui/material';
 
+import { click_on_album_grid_item } from '../../../actions';
+
+import { getAlbumArt } from '../../../config/album_art_paths';
+
 import {
     PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
 } from '../../../config/color_palette';
-
-import { click_on_album_grid_item } from '../../../actions';
-
-import TychoImage from '../../../sample_images/tycho.png';
 
 
 const ALBUM_TILE_SIZE = 250; /* tmp */
@@ -33,7 +33,6 @@ function AlbumTile(props) {
         artistID,
         artistName,
         year,
-        image,
         playtime,
         dispatch,
     } = props;
@@ -43,11 +42,6 @@ function AlbumTile(props) {
             sx={{ display: 'inline-block', mx: '10px', transform: 'scale(2)' }}
         >•</Box>
     );
-
-    // console.log('\n\n\n');
-    // console.log(`albumID: ${albumID}`);
-    // console.log(`albumName: ${albumName}`);
-    // console.log('\n\n\n');
 
     return (
         <Stack
@@ -60,6 +54,7 @@ function AlbumTile(props) {
                 justifyContent: 'flex-start',
                 borderRadius: 5,
                 backgroundColor: SECONDARY_COLOR,
+                boxShadow: 10,
                 cursor: 'pointer',
                 p: 1,
             }}
@@ -70,46 +65,29 @@ function AlbumTile(props) {
                     // height: '200px',
                     width: '90%',
                     height: '70%',
-                    overflow: 'hidden',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    overflow: 'hidden',
+                    borderRadius: 5,
+                    boxShadow: 10,
                     mt: 1,
                 }}
             >
-                {/* <img
-                    src="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
-                    alt="green iguana"
-                /> */}
-                {/* <img
-                    src={TychoImage}
-                    alt='Tycho'
-                    width='100%'
-                    height='auto'
-                /> */}
                 <Box
                     sx={{
                         width: '100%',
                         height: '100%',
-                        overflow: 'hidden',
-                        borderRadius: 5,
                         display: 'flex',
-                        justifyContent: 'flex-start',
                         alignItems: 'flex-start',
-                        // backgroundImage: `url(${'https://material-ui.com/static/images/cards/contemplative-reptile.jpg'})`,
-                        backgroundImage: `url(${TychoImage})`,
+                        justifyContent: 'flex-start',
+                        backgroundImage: `url(${getAlbumArt(albumID)})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
+                        overflow: 'hidden',
+                        borderRadius: 5,
                     }}
-                >
-                    {/* <img
-                        src={TychoImage}
-                        alt='album cover'
-                        display='inline-block'
-                        height='150'
-                        width='150'
-                    /> */}
-                </Box>
+                />
             </Box>
             <Stack
                 sx={{
@@ -201,7 +179,6 @@ export default function AlbumsGrid(props) {
                             artistName={artistName ? artistName : album['Artist_Name']}
                             year={album['Year']}
                             playtime={album['Playtime']}
-                            image={TychoImage}
                             dispatch={dispatch}
                         />
                     </Grid>
