@@ -14,7 +14,11 @@ import ArtistView from './ArtistView';
 import ArtistsGrid from './ArtistsGrid';
 import AlbumView from '../albums/AlbumView';
 
-import { setArtists, setTracks } from '../../../actions';
+import {
+    setArtists,
+    setAlbums,
+    setTracks,
+} from '../../../actions';
 
 
 /**
@@ -42,12 +46,12 @@ export default function ArtistsView(props) {
         const api = new Soren();
 
         async function getArtists() {
+            console.log('setting artists');
             const artistsJSONString = await api.allArtists();
 
-            // console.log(`artists from the DB ${JSON.stringify(artistsJSONString)}`);
-            // console.log(`artistsJSONString.data ${JSON.stringify(artistsJSONString.data)}`);
-
             dispatch(setArtists(artistsJSONString.data));
+            /* need to set albums state */
+            dispatch(setAlbums(artistsJSONString.data));
         }
 
         getArtists();
@@ -63,46 +67,46 @@ export default function ArtistsView(props) {
     }, [artists, selectedArtist, dispatch]);
 
 
-    /* More readable? */
-    // if (selectedArtist && selectedAlbum) {
-    //     return (
-    //         <AlbumView albumName={selectedAlbum}
-    //             tracks={tracks}
-    //             dispatch={dispatch}
-    //         />
-    //     );
-    // }
-
-    // if (selectedArtist) {
-    //     return (
-    //         <ArtistView artistName={selectedArtist}
-    //             albums={albums}
-    //             dispatch={dispatch}
-    //         />
-    //     );
-    // } else {
-    //     return (
-    //         <ArtistsGrid artists={artists}
-    //             dispatch={dispatch}
-    //         />
-    //     );
-    // }
+    /* More readable than the ternary?
+    if (selectedArtist && selectedAlbum) {
+        return (
+            <AlbumView albumName={selectedAlbum}
+                tracks={tracks}
+                dispatch={dispatch}
+            />
+        );
+    } else if (selectedArtist) {
+        return (
+            <ArtistView artistName={selectedArtist}
+                albums={albums}
+                dispatch={dispatch}
+            />
+        );
+    } else {
+        return (
+            <ArtistsGrid artists={artists}
+                dispatch={dispatch}
+            />
+        );
+    }
+    */
 
     const getArtistName = (artistID) => {
         const artist = artists?.find((artist) => artist['ID'] === artistID);
-        return artist['Name'];
+        return artist ? artist['Name'] : null;
     };
 
     const getAlbumName = (albumID) => {
         const album = albums?.find((album) => album['ID'] === albumID);
-        return album['Title'];
+        return album ? album['Title'] : null;
     }
 
     /* Useless RVO? Hip? */
     return (
         selectedArtist ? (
             selectedAlbum ? (
-                <AlbumView albumID={selectedAlbum}
+                <AlbumView
+                    albumID={selectedAlbum}
                     albumName={getAlbumName(selectedAlbum)}
                     artists={artists}
                     tracks={tracks}
@@ -113,7 +117,7 @@ export default function ArtistsView(props) {
                     artistID={selectedArtist}
                     artistName={getArtistName(selectedArtist)}
                     artists={artists} // idk how I feel about this...
-                    albums={albums}
+                    // albums={albums}
                     dispatch={dispatch}
                 />
             )

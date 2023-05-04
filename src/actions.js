@@ -45,11 +45,8 @@ export function setTracks(artists) {
             album['Tracks'].forEach(track => {
                 allTracks.push({
                     ...track,
-                    // title: track['Title'],
                     artist: artist['Name'],
                     album: album['Title'],
-                    // duration: track['Length'],
-                    // more track data ...
                 });
             });
         });
@@ -72,6 +69,8 @@ export function setTracks(artists) {
  * adding the artist ID and name to each album object).
  */
 export function setAlbums(artists) {
+    console.log(`setAlbums`);
+
     const allAlbums = artists?.flatMap(artist =>
         artist['Albums'].map(album => ({
             ...album,
@@ -121,12 +120,10 @@ export function get_tracks_by_album(albumID, artists) {
                 album['Tracks'].forEach(track => {
                     tracks.push({
                         ...track,
-                        title: track['Title'],
                         artist: artist['Name'],
                         album: album['Title'],
-                        duration: track['Length'],
-                    })
-                })
+                    });
+                });
             }
         });
     });
@@ -152,16 +149,18 @@ export function get_tracks_by_album(albumID, artists) {
  * @param {Object} artists An array of artist objects.
  * @returns {Object} An object with an array of albums as the payload.
  */
-export function get_albums_by_artist(artistID, artists) {
-    const albums = artists.find(a => a['ID'] === artistID)['Albums'];
+// export function get_albums_by_artist(artistID, artists) {
+//     // const albums = artists.find(a => a['ID'] === artistID)['Albums'];
+//     const albumsByArtist = artists.find(a => a['ID'] === artistID)['Albums'];
 
-    return {
-        type: 'GET_ALBUMS_BY_ARTIST_ID',
-        payload: {
-            albums: albums,
-        }
-    };
-}
+//     return {
+//         type: 'GET_ALBUMS_BY_ARTIST_ID',
+//         payload: {
+//             // albums: albums,
+//             albumsByArtist: albumsByArtist,
+//         }
+//     };
+// }
 
 
 /* LibraryView actions */

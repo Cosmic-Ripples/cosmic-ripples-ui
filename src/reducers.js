@@ -13,6 +13,7 @@ function initialState() {
 
         artists: null,
         albums: null,
+        albumsByArtist: null,
         tracks: null,
 
         selectedMenuItem: 'Default View',
@@ -57,7 +58,8 @@ function reducers(state, action) {
         case 'GET_ALBUMS_BY_ARTIST_ID':
             return {
                 ...state,
-                albums: action.payload.albums,
+                // albums: action.payload.albums,
+                albumsByArtist: action.payload.albumsByArtist,
             };
 
         /* LibraryView actions */

@@ -10,9 +10,16 @@ import { PlayCircle } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
+import Soren from '../../../api_interface/API_Interface';
+
 import TracksTable from '../tracks/TracksTable';
 
-import { get_tracks_by_album, revisit_albums_view } from '../../../actions';
+import {
+    setAlbums,
+    setArtists,
+    get_tracks_by_album,
+    revisit_albums_view,
+} from '../../../actions';
 
 import { getAlbumArt } from '../../../config/album_art_paths';
 
@@ -131,7 +138,10 @@ function AlbumHeader(props) {
  * @returns {JSX.Element} - Box containing AlbumHeader and TracksTable.
  */
 export default function AlbumView(props) {
-    const { albumName, albumID, artists, tracks, dispatch } = props;
+    const { albumName, albumID, album, dispatch } = props;
+    const { artists, tracks } = props; /* want to get rid of these */
+
+    console.assert(albumName, `${albumName} is not a valid album name`);
 
     // setNewQueueAndPlayCallBack
 
@@ -156,7 +166,9 @@ export default function AlbumView(props) {
                 pb: 4,
             }}
         >
-            <AlbumHeader albumName={albumName} albumID={albumID}
+            <AlbumHeader
+                albumID={albumID}
+                albumName={albumName}
                 dispatch={dispatch}
             />
             <Box
@@ -170,7 +182,7 @@ export default function AlbumView(props) {
             >
                 <TracksTable
                     tracks={getTracksByAlbum(albumID)}
-                    artists={artists}
+                    // tracks={album['Tracks']}
                     dispatch={dispatch}
                 />
             </Box>

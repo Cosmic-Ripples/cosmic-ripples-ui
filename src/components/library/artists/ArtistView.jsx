@@ -6,6 +6,8 @@ import React, { useEffect } from 'react';
 
 import { Box, Stack, IconButton, Typography } from '@mui/material';
 
+import Soren from '../../../api_interface/API_Interface';
+
 import { PlayCircle } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -17,6 +19,8 @@ import {
 } from '../../../config/color_palette';
 
 import {
+    setAlbums,
+    setArtists,
     revisit_artists_view,
     get_albums_by_artist,
 } from '../../../actions';
@@ -150,23 +154,38 @@ function ArtistHeader(props) {
 
 
 export default function ArtistView(props) {
-    const { artistName, artistID, artists, albums, dispatch } = props;
+    const { artistName, artistID, artists, dispatch } = props;
 
     // setNewQueueAndPlayCallBack
 
     useEffect(() => {
-        async function getAlbums() {
-            dispatch(get_albums_by_artist(artistID, artists));
+        const checkSanity = true;
+        checkSanity && console.log('called useEffect');
+
+        async function getArtists() {
+            checkSanity && console.log('called async getAlbums()');
+
+            const api = new Soren();
+            const artistsJSONString = await api.allArtists();
+            dispatch(setArtists(artistsJSONString.data));
+            /* setting in ArtistsView */
+            // dispatch(setAlbums(artistsJSONString.data));
         }
 
-        /* TODO: Toss in the album art here ? */
-        getAlbums();
+        if (!artists) {
+            getArtists();
+        }
+    }, [artists, dispatch]);
 
-    }, [artistID, artists, dispatch]);
-
-    /* Get Artist Image (here or in ArtistHeader */
-
-    /* If not get album art in above useEffect, get here and add to albums */
+    function getAlbumsByArtist(artistID) { // :(
+        console.log('getAlbumsByArtist');
+        const albumsByArtist = artists.find(a => a['ID'] === artistID)['Albums'];
+        albumsByArtist.forEach(album => {
+            console.log(`album: ${album['Title']}`);
+            console.table(album);
+        });
+        return albumsByArtist;
+    }
 
     return (
         <Box
@@ -188,7 +207,7 @@ export default function ArtistView(props) {
             >
                 <AlbumsGrid
                     artistName={artistName}
-                    albums={albums}
+                    albums={getAlbumsByArtist(artistID)}
                     dispatch={dispatch}
                 />
             </Box>

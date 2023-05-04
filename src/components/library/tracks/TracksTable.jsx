@@ -266,13 +266,17 @@ export default function TracksTable(props) {
                                 <Typography component='div' variant='h7'
                                     sx={{ ...quickDirtyStyle }}
                                 >
-                                    {track.Title}
+                                    {track['Title']}
                                 </Typography>
                             </TableCell>
                             <TableCell align='right'>
                                 <Typography component='div' variant='h7'
                                     sx={{ ...quickDirtyStyle }}
                                 >
+                                    {/* TODO: change with new structure from DB
+                                    'artist' attribute set in actions.js
+                                    within the 'get_tracks_by_album' method
+                                    */}
                                     {track.artist}
                                 </Typography>
                             </TableCell>
@@ -280,6 +284,10 @@ export default function TracksTable(props) {
                                 <Typography component='div' variant='h7'
                                     sx={{ ...quickDirtyStyle }}
                                 >
+                                    {/* TODO: change with new structure from DB
+                                    'album' attribute set in actions.js
+                                    within the 'get_tracks_by_album' method
+                                    */}
                                     {track.album}
                                 </Typography>
                             </TableCell>
@@ -287,7 +295,7 @@ export default function TracksTable(props) {
                                 <Typography component='div' variant='h7'
                                     sx={{ ...quickDirtyStyle }}
                                 >
-                                    {track.Length}
+                                    {track['Length']}
                                 </Typography>
                             </TableCell>
                             <TableCell align='right'>
