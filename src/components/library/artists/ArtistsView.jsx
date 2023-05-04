@@ -43,7 +43,6 @@ export default function ArtistsView(props) {
         const api = new Soren();
 
         async function getArtists() {
-            console.log('setting artists');
             const artistsJSONString = await api.allArtists();
 
             dispatch(setArtists(artistsJSONString.data));
