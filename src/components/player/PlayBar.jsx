@@ -11,6 +11,8 @@ import { Box, Stack, Slider, IconButton, Typography } from '@mui/material';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
+import { getAlbumArt } from '../../config/album_art_paths';
+
 import {
     playerButtonStyle,
     SkipBackButton, PlayOrPauseButton, SkipForwardButton, RewindButton, FastForwardButton
@@ -43,8 +45,11 @@ const DEBUG = false;
  * followed by a vertical Stack of the track's title and artist.
  */
 function CurrentTrackInfo(props) {
-    const { title, artist, image, dispatch } = props;
-
+    const { title, artist, albumID, dispatch } = props;
+    console.log("title: ", title);
+    console.log("artist: ", artist);
+    console.log("albumID: ", albumID);
+    console.log(getAlbumArt(albumID));
     return (
         <Stack aria-label='playbar track info'
             direction='row'
@@ -59,7 +64,7 @@ function CurrentTrackInfo(props) {
                 borderColor: 'yellow',
             }}
         >
-            <img src={TychoImage} alt='Tycho' loading='lazy' width='15%' />
+            <img src={getAlbumArt(albumID)} alt='Tycho' loading='lazy' width='15%' />
             <Stack>
                 <Typography aria-label='track title'
                     variant='h7'
@@ -399,8 +404,9 @@ export default function PlayBar(props) {
         currentTrackInfo
     } = props;
 
-    const title = currentTrackInfo.title;
+    const title = currentTrackInfo.Title;
     const artist = currentTrackInfo.artist;
+    const albumID = currentTrackInfo["Album_ID"];
 
     return (
         <Stack aria-label='playbar'
@@ -421,7 +427,7 @@ export default function PlayBar(props) {
             }}
         >
 
-            <CurrentTrackInfo title={title} artist={artist} />
+            <CurrentTrackInfo title={title} artist={artist} albumID={albumID}/>
             <PlayBackControls
                 playOrPauseAudio={playOrPauseAudio}
                 paused={paused}
