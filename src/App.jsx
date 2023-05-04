@@ -44,44 +44,30 @@ export default function App() {
         //https://stackoverflow.com/questions/64474338/audio-player-returns-uncaught-in-promise-domexception-the-element-has-no-su
         audioPlayer.crossOrigin = "anonymous";
 
-
-        // Preferred old names:
-        // trackTitle
-        // albumTitle
-        // artistName
-        // trackID
-
+        /*
+        setQueue([
+            {
+                Title: 'Slider',
+                album: 'Epoch',
+                artist: 'Tycho',
+                ID: '3235',
+                Album_ID: '1604'
+            }
+        ]);*/
 
         setQueue([
             {
-                title: 'Greetings',
-                album: 'Achievement',
-                artist: 'pilotredsun',
-                ID: '3235'
-            },
-            {
-                title: 'Blueberry Hill Single Version',
-                album: "Louis Armstrong's Greatest Hits",
-                artist: 'Louis Armstrong',
-                ID: '3207'
-            },
-            {
-                title: 'Red Moon - For Storm Station Act 3',
-                album: 'Sonic After the Sequel Original Sound Track',
-                artist: 'Funk Fiction',
-                ID: '3223'
-            },
-            {
-                title: 'Cyclic',
-                album: 'Album',
-                artist: 'FreakyBro',
-                ID: '3216'
+                Title: 'Glider',
+                album: 'Epoch',
+                artist: 'Tycho',
+                ID: '3208',
+                Album_ID: '1601'
             }
         ]);
 
         setQueueHeadIdx(0);
 
-        audioPlayer.src = apiPlayCallString + '3235';
+        audioPlayer.src = apiPlayCallString + '3208';
 
         /*
         audioPlayer.ontimeupdate = function () {
