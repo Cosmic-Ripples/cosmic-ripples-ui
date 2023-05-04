@@ -44,6 +44,7 @@ export default function App() {
         //https://stackoverflow.com/questions/64474338/audio-player-returns-uncaught-in-promise-domexception-the-element-has-no-su
         audioPlayer.crossOrigin = "anonymous";
 
+        /*
         setQueue([
             {
                 Title: 'Slider',
@@ -52,11 +53,21 @@ export default function App() {
                 ID: '3235',
                 Album_ID: '1604'
             }
+        ]);*/
+
+        setQueue([
+            {
+                Title: 'Glider',
+                album: 'Epoch',
+                artist: 'Tycho',
+                ID: '3208',
+                Album_ID: '1601'
+            }
         ]);
 
         setQueueHeadIdx(0);
 
-        audioPlayer.src = apiPlayCallString + '3235';
+        audioPlayer.src = apiPlayCallString + '3208';
 
         /*
         audioPlayer.ontimeupdate = function () {
