@@ -22,8 +22,6 @@ import {
     PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
 } from '../../config/color_palette';
 
-import TychoImage from '../../sample_images/tycho.png';
-
 
 const DEBUG = false;
 
@@ -46,10 +44,13 @@ const DEBUG = false;
  */
 function CurrentTrackInfo(props) {
     const { title, artist, albumID, dispatch } = props;
-    console.log("title: ", title);
-    console.log("artist: ", artist);
-    console.log("albumID: ", albumID);
-    console.log(getAlbumArt(albumID));
+
+    /* console.log here prevents other views from utilizing console.log */
+    // console.log("title: ", title);
+    // console.log("artist: ", artist);
+    // console.log("albumID: ", albumID);
+    // console.log(getAlbumArt(albumID));
+
     return (
         <Stack aria-label='playbar track info'
             direction='row'
@@ -427,7 +428,7 @@ export default function PlayBar(props) {
             }}
         >
 
-            <CurrentTrackInfo title={title} artist={artist} albumID={albumID}/>
+            <CurrentTrackInfo title={title} artist={artist} albumID={albumID} />
             <PlayBackControls
                 playOrPauseAudio={playOrPauseAudio}
                 paused={paused}

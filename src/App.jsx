@@ -1,13 +1,11 @@
-import React, { createContext, useState } from 'react';
+import React, { useState } from 'react';
 
-import { Box, Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 
 import MainDrawer from './components/menu/MainDrawer';
 import PlaybackControls from './components/player/PlayBar';
 
-import {
-    PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
-} from './config/color_palette';
+import { PRIMARY_COLOR } from './config/color_palette';
 
 import './App.css';
 
@@ -120,6 +118,7 @@ export default function App() {
         }
     }
 
+
     const playOrPauseAudio = () => {
         if (paused === false) {
             audioPlayer.pause();
@@ -129,10 +128,12 @@ export default function App() {
         }
     }
 
+
     const changeVolume = (newVolume) => {
         setVolume(newVolume);
         audioPlayer.volume = newVolume / 100;
     }
+
 
     const movePlayPosition = (newPlayPosition) => {
         if (newPlayPosition === 100) {
@@ -142,12 +143,14 @@ export default function App() {
         setCurrentTime(audioPlayer.currentTime);
     }
 
+
     const skipPlayback = (skipAmount) => {
         console.log(audioPlayer.currentTime);
         audioPlayer.currentTime = audioPlayer.currentTime + skipAmount;
         setCurrentTime(audioPlayer.currentTime);
         console.log(audioPlayer.currentTime);
     }
+
 
     const skipBack = () => {
         if (Math.floor(audioPlayer.currentTime) < 3 && queueHeadIdx !== 0) {
@@ -165,6 +168,7 @@ export default function App() {
         }
     }
 
+
     const skipForward = () => {
         if (queueHeadIdx === queue.length - 1) {
             audioPlayer.currentTime = audioPlayer.duration;
@@ -180,6 +184,7 @@ export default function App() {
         }
     }
 
+    
     /**
      * Can be used in Tracks View Header to set queue and play the first track
      * when a user clicks on the play button.

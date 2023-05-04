@@ -10,16 +10,11 @@ import { PlayCircle } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import Soren from '../../../api_interface/API_Interface';
+import PropTypes from 'prop-types';
 
 import TracksTable from '../tracks/TracksTable';
 
-import {
-    setAlbums,
-    setArtists,
-    get_tracks_by_album,
-    revisit_albums_view,
-} from '../../../actions';
+import { get_tracks_by_album, revisit_albums_view, } from '../../../actions';
 
 import { getAlbumArt } from '../../../config/album_art_paths';
 
@@ -30,6 +25,7 @@ import {
 
 function AlbumHeader(props) {
     const { albumName, albumID, dispatch } = props;
+    const { setNewQueueAndPlayCallBack } = props;
 
     return (
         <Stack direction='row'
@@ -118,7 +114,7 @@ function AlbumHeader(props) {
                 </Typography>
 
                 <IconButton aria-label='play album'
-                    onClick={() => { console.log('TODO: play album'); }}
+                    onClick={() => { setNewQueueAndPlayCallBack(); }}
                 >
                     <PlayCircle
                         sx={{ color: QUATERNARY_COLOR, fontSize: 40, }}
@@ -138,12 +134,10 @@ function AlbumHeader(props) {
  * @returns {JSX.Element} - Box containing AlbumHeader and TracksTable.
  */
 export default function AlbumView(props) {
-    const { albumName, albumID, album, dispatch } = props;
+    const { albumName, albumID, dispatch } = props;
     const { artists, tracks } = props; /* want to get rid of these */
+    const { setNewQueueAndPlay } = props;
 
-    console.assert(albumName, `${albumName} is not a valid album name`);
-
-    // setNewQueueAndPlayCallBack
 
     useEffect(() => {
         async function getTracks() {
@@ -153,10 +147,12 @@ export default function AlbumView(props) {
         getTracks();
     }, [albumID, artists, dispatch]);
 
+
     const getTracksByAlbum = (albumID) => {
         const album = tracks?.filter((track) => track.Album_ID === albumID);
         return album;
     };
+
 
     return (
         <Box
@@ -170,6 +166,7 @@ export default function AlbumView(props) {
                 albumID={albumID}
                 albumName={albumName}
                 dispatch={dispatch}
+                setNewQueueAndPlayCallBack={() => setNewQueueAndPlay(tracks, 0)}
             />
             <Box
                 sx={{
@@ -182,10 +179,18 @@ export default function AlbumView(props) {
             >
                 <TracksTable
                     tracks={getTracksByAlbum(albumID)}
-                    // tracks={album['Tracks']}
                     dispatch={dispatch}
                 />
             </Box>
         </Box>
     );
 }
+AlbumView.propTypes = {
+    albumID: PropTypes.number.isRequired,
+    albumName: PropTypes.string.isRequired,
+    artists: PropTypes.array,
+    tracks: PropTypes.array,
+    dispatch: PropTypes.func.isRequired,
+    /* TODO: prop types warning is from lack of prop drilling into Artists */
+    setNewQueueAndPlay: PropTypes.func.isRequired,
+};
