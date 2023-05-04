@@ -191,6 +191,5 @@ AlbumView.propTypes = {
     artists: PropTypes.array,
     tracks: PropTypes.array,
     dispatch: PropTypes.func.isRequired,
-    /* TODO: prop types warning is from lack of prop drilling into Artists */
     setNewQueueAndPlay: PropTypes.func.isRequired,
 };

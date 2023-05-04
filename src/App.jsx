@@ -203,7 +203,8 @@ export default function App() {
         console.log('newQueueTracksInfo at newQueueHead:');
         console.table(newQueueTracksInfo[newQueueHead]);
 
-        console.log('here is the new queue: ', newQueueTracksInfo);
+        console.log('here is the new queue:');
+        console.table(newQueueTracksInfo);
 
         /* TODO: Figure out a way to add in everything that isn't already in
         the queue. */

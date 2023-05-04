@@ -14,11 +14,7 @@ import ArtistView from './ArtistView';
 import ArtistsGrid from './ArtistsGrid';
 import AlbumView from '../albums/AlbumView';
 
-import {
-    setArtists,
-    setAlbums,
-    setTracks,
-} from '../../../actions';
+import { setArtists, setAlbums, setTracks, } from '../../../actions';
 
 
 /**
@@ -39,6 +35,7 @@ export default function ArtistsView(props) {
         tracks,
         selectedArtist,
         selectedAlbum,
+        setNewQueueAndPlay,
         dispatch,
     } = props;
 
@@ -50,7 +47,6 @@ export default function ArtistsView(props) {
             const artistsJSONString = await api.allArtists();
 
             dispatch(setArtists(artistsJSONString.data));
-            /* need to set albums state */
             dispatch(setAlbums(artistsJSONString.data));
         }
 
@@ -110,14 +106,14 @@ export default function ArtistsView(props) {
                     albumName={getAlbumName(selectedAlbum)}
                     artists={artists}
                     tracks={tracks}
+                    setNewQueueAndPlay={setNewQueueAndPlay}
                     dispatch={dispatch}
                 />
             ) : (
                 <ArtistView
                     artistID={selectedArtist}
                     artistName={getArtistName(selectedArtist)}
-                    artists={artists} // idk how I feel about this...
-                    // albums={albums}
+                    artists={artists} // bad... I feel bad about this...
                     dispatch={dispatch}
                 />
             )
