@@ -154,7 +154,8 @@ export default function TracksView(props) {
             >
                 <TracksTable
                     tracks={tracks}
-                    setNewQueueAndPlayCallBack={setNewQueueAndPlayCallBack}
+                    // setNewQueueAndPlayCallBack={setNewQueueAndPlayCallBack}
+                    setNewQueueAndPlay={setNewQueueAndPlay}
                     dispatch={dispatch}
                 />
             </Box>

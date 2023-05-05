@@ -196,10 +196,16 @@ function TrackIndicator(props) {
  * @returns {JSX.Element} A table of tracks.
  */
 export default function TracksTable(props) {
-    const { tracks, setNewQueueAndPlayCallBack } = props;
+    // const { tracks, setNewQueueAndPlayCallBack } = props;
+    const { tracks, setNewQueueAndPlay } = props;
 
 
     const quickDirtyStyle = { fontWeight: 'bold', color: TERTIARY_COLOR };
+
+
+    function setNewQueueAndPlayCallBack(track_idx) {
+        setNewQueueAndPlay(tracks.slice(track_idx), 0);
+    }
 
 
     return (

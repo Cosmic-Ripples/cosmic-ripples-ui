@@ -182,6 +182,7 @@ export default function AlbumView(props) {
             >
                 <TracksTable
                     tracks={getTracksByAlbum(albumID)}
+                    setNewQueueAndPlay={setNewQueueAndPlay}
                     dispatch={dispatch}
                 />
             </Box>
