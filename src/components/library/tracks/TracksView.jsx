@@ -18,7 +18,7 @@ import {
 
 import { setArtists, setTracks } from '../../../actions';
 
-import TychoImage from '../../../sample_images/tycho.png';
+// import TychoImage from '../../../sample_images/tycho.png';
 
 
 
@@ -45,7 +45,7 @@ function TracksHeader(props) {
                 mb: 2,
             }}
         >
-            <Stack
+            {/* <Stack // Tycho Image
                 sx={{
                     height: '100%',
                     width: '20%',
@@ -67,16 +67,8 @@ function TracksHeader(props) {
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                     }}
-                >
-                    {/* <img
-                        src={TychoImage}
-                        alt='album cover'
-                        display='inline-block'
-                        height='150'
-                        width='150'
-                    /> */}
-                </Box>
-            </Stack>
+                />
+            </Stack> */}
             <Stack
                 sx={{
                     height: '100%',
@@ -94,7 +86,7 @@ function TracksHeader(props) {
                         color: QUATERNARY_COLOR,
                     }}
                 >
-                    Yes, these are your tracks.
+                    Library Tracks
                 </Typography>
 
                 <IconButton aria-label='play all tracks'
