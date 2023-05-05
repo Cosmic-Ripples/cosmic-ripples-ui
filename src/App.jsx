@@ -32,7 +32,6 @@ export default function App() {
     const [paused, setPaused] = useState(() => true);
     const [currentTime, setCurrentTime] = useState(() => 0);
     // const [message, setMessage] = useState("");
-
     const [queue, setQueue] = useState([]);
     const [queueHeadIdx, setQueueHeadIdx] = useState(() => null);
     const [audioPlayer, setAudioPlayer] = useState(() => {
@@ -184,30 +183,19 @@ export default function App() {
         }
     }
 
-    
+
     /**
      * Can be used in Tracks View Header to set queue and play the first track
      * when a user clicks on the play button.
+     * @param {Array} newQueueTracksInfo An array of track objects to make
+     * up the new queue.
+     * @param {Number} newQueueHead The index of the track in the new queue
+     * to play first.
+     * @todo Owen: I believe this function will only ever set the queue index
+     * to 0? If so, we can remove the newQueueHead parameter.
      */
     const setNewQueueAndPlay = (newQueueTracksInfo, newQueueHead) => {
-        /* DEBUG */
-        // console.log('Called setNewQueueAndPlay');
-        // Object.keys(newQueueTracksInfo).forEach((key) => {
-        //     console.log(`'${key}': ${newQueueTracksInfo[key]}`);
-        //     Object.keys(newQueueTracksInfo[key]).forEach((key2) => {
-        //         console.log(`'${key2}': ${newQueueTracksInfo[key][key2]}`);
-        //     });
-        // });
-        /* END DEBUG */
-
-        console.log('newQueueTracksInfo at newQueueHead:');
-        console.table(newQueueTracksInfo[newQueueHead]);
-
-        console.log('here is the new queue:');
-        console.table(newQueueTracksInfo);
-
-        /* TODO: Figure out a way to add in everything that isn't already in
-        the queue. */
+        console.assert(newQueueHead === 0, 'newQueueHead must be 0... I think');
 
         setQueue(newQueueTracksInfo);
         setQueueHeadIdx(newQueueHead);
@@ -215,6 +203,7 @@ export default function App() {
         audioPlayer.play();
         setCurrentTime(audioPlayer.currentTime);
     }
+
 
     return (
         <Stack direction='column'

@@ -7,16 +7,16 @@
 import React, { useState } from 'react';
 
 import {
-    Typography, Paper, IconButton,
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box,
+    Box, Paper, Typography, IconButton,
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
 } from '@mui/material';
-
-import {
-    PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
-} from '../../../config/color_palette';
 
 import { PlayCircle } from '@mui/icons-material';
 import PauseCircleIcon from '@mui/icons-material/PauseCircle';
+
+import {
+    SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
+} from '../../../config/color_palette';
 
 
 /**
@@ -109,12 +109,12 @@ function PauseButton(props) {
  * onClick handler to play or pause the audio
  */
 function PlayOrPauseButton(props) {
-    const { playOrPauseAudio, paused } = props;
+    const { onClickCallBack, paused } = props;
 
     return (
         paused ? (
             <IconButton aria-label='play button'
-                onClick={playOrPauseAudio}
+                onClick={() => onClickCallBack()}
                 sx={{ ...playerButtonStyle(`"play"`) }
                 }
                 size='large'
@@ -132,7 +132,7 @@ function PlayOrPauseButton(props) {
             </IconButton >
         ) : (
             <IconButton aria-label='pause button'
-                onClick={playOrPauseAudio}
+                onClick={() => console.log('PAUSE')}
                 sx={{ ...playerButtonStyle(`"pause"`) }}
                 size='large'
             >
@@ -145,6 +145,7 @@ function PlayOrPauseButton(props) {
     );
 }
 
+
 /**
  * A component that will display the index of the track in the table
  * or a play or pause button if hovered over.
@@ -153,9 +154,9 @@ function PlayOrPauseButton(props) {
  */
 function TrackIndicator(props) {
     const { idx, onClickCallBack } = props;
-    // const { idx, hovered } = props;
-
+    // const { hovered } = props;
     const [hovered, setHovered] = useState(false);
+
 
     return (
         <Box
@@ -171,14 +172,16 @@ function TrackIndicator(props) {
         >
             {hovered ? (
                 <PlayOrPauseButton
-                    playOrPauseAudio={onClickCallBack}
-                    paused={true}
+                    onClickCallBack={onClickCallBack}
+                    paused={true} // TODO
                 />
             ) : (
                 <Typography component='div' variant='h7'
                     sx={{ color: TERTIARY_COLOR }}
                 >
                     {idx + 1}
+                    {/* cool people start from zero */}
+                    {/* {idx} */}
                 </Typography>
             )}
         </Box>
@@ -190,18 +193,14 @@ function TrackIndicator(props) {
  * Returns a table of tracks of the form:
  * | TrackIndicator | track title | artist | album | Duration | options |
  * @param {Object} props.tracks The tracks to be displayed.
- * @param {Function} props.dispatch The dispatch function to be used
- * to set the tracks.
  * @returns {JSX.Element} A table of tracks.
  */
 export default function TracksTable(props) {
-    const { tracks } = props;
+    const { tracks, setNewQueueAndPlayCallBack } = props;
+
 
     const quickDirtyStyle = { fontWeight: 'bold', color: TERTIARY_COLOR };
 
-    const setQueueHead = (trackID) => {
-        console.log('This function can set the head of the queue ?');
-    };
 
     return (
         <TableContainer component={Paper} sx={{ borderRadius: 5 }} >
@@ -256,10 +255,14 @@ export default function TracksTable(props) {
                         >
                             <TableCell>
                                 {track.isPlaying ? (
-                                    <PauseButton pauseAudio={() => console.log('PAUSE')} />
+                                    <PauseButton
+                                        pauseAudio={() => console.log('PAUSE')} />
                                 ) : (
-                                    <TrackIndicator idx={idx} onClickCallBack={() => setQueueHead('trackID')} />
-                                    // <TrackIndicator idx={idx} hovered={hovered} />
+                                    <TrackIndicator
+                                        idx={idx}
+                                        onClickCallBack={() => setNewQueueAndPlayCallBack(idx)}
+                                    // hovered={hovered}
+                                    />
                                 )}
                             </TableCell>
                             <TableCell>

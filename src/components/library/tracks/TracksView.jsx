@@ -2,7 +2,7 @@
  * @file TracksView.jsx
  */
 
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 
 import Soren from '../../../api_interface/API_Interface';
 
@@ -13,7 +13,7 @@ import { PlayCircle } from '@mui/icons-material';
 import TracksTable from './TracksTable';
 
 import {
-    PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
+    SECONDARY_COLOR, QUATERNARY_COLOR,
 } from '../../../config/color_palette';
 
 import { setArtists, setTracks } from '../../../actions';
@@ -97,8 +97,7 @@ function TracksHeader(props) {
                     Yes, these are your tracks.
                 </Typography>
 
-                <IconButton aria-label='play album'
-                    // onClick={() => { console.log('TODO: play album'); }}
+                <IconButton aria-label='play all tracks'
                     onClick={() => { setNewQueueAndPlayCallBack(); }}
                 >
                     <PlayCircle
@@ -120,13 +119,8 @@ function TracksHeader(props) {
  * 
  * */
 export default function TracksView(props) {
-    const {
-        tracks,
-        artists,
-        dispatch,
+    const { tracks, setNewQueueAndPlay, dispatch, } = props;
 
-        setNewQueueAndPlay,
-    } = props;
 
     useEffect(() => {
         const api = new Soren();
@@ -134,18 +128,23 @@ export default function TracksView(props) {
         async function getArtists() {
             const artistsJSONString = await api.allArtists();
             dispatch(setArtists(artistsJSONString.data));
+            dispatch(setTracks(artistsJSONString.data));
         }
 
         getArtists();
     }, [dispatch]);
 
-    useEffect(() => {
-        async function getTracks() {
-            dispatch(setTracks(artists));
-        }
 
-        getTracks();
-    }, [artists, dispatch]);
+    /**
+     * Sets the tracks to all tracks after the selected track and plays the
+     * selected track.
+     * @param {Number} track_idx - index of the track to play
+     * @returns {function} A function!
+     */
+    function setNewQueueAndPlayCallBack(track_idx) {
+        return setNewQueueAndPlay(tracks.slice(track_idx), 0);
+    }
+
 
     return (
         <Box sx={{ height: '95%', width: '100%', pb: 2 }} >
@@ -161,7 +160,11 @@ export default function TracksView(props) {
                     backgroundColor: SECONDARY_COLOR,
                 }}
             >
-                <TracksTable tracks={tracks} dispatch={dispatch} />
+                <TracksTable
+                    tracks={tracks}
+                    setNewQueueAndPlayCallBack={setNewQueueAndPlayCallBack}
+                    dispatch={dispatch}
+                />
             </Box>
         </Box>
     );
