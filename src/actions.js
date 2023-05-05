@@ -1,9 +1,5 @@
 /**
  * @file actions.js
- * @description Definitions for all actions in the application.
- * @todo - In prpgress - Separate Actions into separate files.
- * @todo - Send requests to the metadata/db endpoint to get data for each view
- * instead of, for example, passing artists in.
  */
 
 
@@ -38,19 +34,15 @@ export function toggleDrawer(open) {
  * adding the track's title, artist, album, and duration to each track object).
  */
 export function setTracks(artists) {
-    const allTracks = [];
-
-    artists?.forEach(artist => {
-        artist['Albums'].forEach(album => {
-            album['Tracks'].forEach(track => {
-                allTracks.push({
-                    ...track,
-                    artist: artist['Name'],
-                    album: album['Title'],
-                });
-            });
-        });
-    });
+    const allTracks = artists?.flatMap(artist =>
+        artist['Albums'].flatMap(album =>
+            album['Tracks'].map(track => ({
+                ...track,
+                artist: artist['Name'],
+                album: album['Title'],
+            }))
+        )
+    );
 
     return {
         type: 'SET_TRACKS',
@@ -69,8 +61,6 @@ export function setTracks(artists) {
  * adding the artist ID and name to each album object).
  */
 export function setAlbums(artists) {
-    console.log(`setAlbums`);
-
     const allAlbums = artists?.flatMap(artist =>
         artist['Albums'].map(album => ({
             ...album,
@@ -128,10 +118,6 @@ export function get_tracks_by_album(albumID, artists) {
         });
     });
 
-    console.log(`tracks: ${tracks}`);
-
-    // const artist = artists.find(a => a['Albums'].find(b => b['ID'] === albumID));
-
     return {
         type: 'GET_TRACKS_BY_ALBUM_ID',
         payload: {
@@ -149,18 +135,18 @@ export function get_tracks_by_album(albumID, artists) {
  * @param {Object} artists An array of artist objects.
  * @returns {Object} An object with an array of albums as the payload.
  */
-// export function get_albums_by_artist(artistID, artists) {
-//     // const albums = artists.find(a => a['ID'] === artistID)['Albums'];
-//     const albumsByArtist = artists.find(a => a['ID'] === artistID)['Albums'];
+function get_albums_by_artist(artistID, artists) {
+    // const albums = artists.find(a => a['ID'] === artistID)['Albums'];
+    const albumsByArtist = artists.find(a => a['ID'] === artistID)['Albums'];
 
-//     return {
-//         type: 'GET_ALBUMS_BY_ARTIST_ID',
-//         payload: {
-//             // albums: albums,
-//             albumsByArtist: albumsByArtist,
-//         }
-//     };
-// }
+    return {
+        type: 'GET_ALBUMS_BY_ARTIST_ID',
+        payload: {
+            // albums: albums,
+            albumsByArtist: albumsByArtist,
+        }
+    };
+}
 
 
 /* LibraryView actions */
@@ -187,7 +173,6 @@ export function click_on_menu_item(selectedMenuItem) {
  * @returns {object} the action to be dispatched.
  */
 export function click_on_album_grid_item(selectedAlbumID) {
-    console.log(`typeof selectedAlbumID: ${typeof selectedAlbumID}`);
     return {
         type: 'CLICK_ON_ALBUM_GRID_ITEM',
         payload: {
@@ -249,7 +234,6 @@ export function revisit_artists_view() {
  * @returns {object} the action to be dispatched.
  */
 function setAudio(audio) {
-    console.log(`typeof audio: ${typeof audio}`);
     return {
         type: 'SET_AUDIO',
         payload: {
