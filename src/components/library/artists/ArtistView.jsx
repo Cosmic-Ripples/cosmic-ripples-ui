@@ -26,6 +26,9 @@ import {
 } from '../../../actions';
 
 import TychoImage from '../../../sample_images/tycho.png';
+import { getArtistArt } from '../../../config/album_art_paths';
+
+import styled from '@mui/material/styles/styled';
 
 
 // const ArtistHeader = styled(Stack)(({ theme }) => ({
@@ -42,8 +45,21 @@ import TychoImage from '../../../sample_images/tycho.png';
 // }));
 
 
+const ArtistImage = styled(Box)(({ artistid, theme }) => ({
+    width: '20%',
+    height: '100%',
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundImage: `url(${getArtistArt(artistid)})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+}));
+
+
 function ArtistHeader(props) {
-    const { artistName, dispatch } = props;
+    const { artistID, artistName, dispatch } = props;
 
     return (
         <Stack direction='row'
@@ -60,38 +76,7 @@ function ArtistHeader(props) {
                 mb: 2,
             }}
         >
-            <Stack
-                sx={{
-                    height: '100%',
-                    width: '20%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                }}
-            >
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '100%',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        backgroundImage: `url(${TychoImage})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                >
-
-                    {/* <img
-                        src={TychoImage}
-                        alt='album cover'
-                        display='inline-block'
-                        height='150'
-                        width='150'
-                    /> */}
-                </Box>
-            </Stack>
+            <ArtistImage artistid={artistID} />
             <Stack
                 sx={{
                     height: '100%',
@@ -154,12 +139,11 @@ function ArtistHeader(props) {
 
 
 export default function ArtistView(props) {
-    const { artistName, artistID, artists, dispatch } = props;
+    const { artistID, artistName, artists, dispatch } = props;
 
-    // setNewQueueAndPlayCallBack
 
     useEffect(() => {
-        const checkSanity = true;
+        const checkSanity = false;
         checkSanity && console.log('called useEffect');
 
         async function getArtists() {
@@ -168,8 +152,6 @@ export default function ArtistView(props) {
             const api = new Soren();
             const artistsJSONString = await api.allArtists();
             dispatch(setArtists(artistsJSONString.data));
-            /* setting in ArtistsView */
-            // dispatch(setAlbums(artistsJSONString.data));
         }
 
         if (!artists) {
@@ -178,12 +160,12 @@ export default function ArtistView(props) {
     }, [artists, dispatch]);
 
     function getAlbumsByArtist(artistID) { // :(
-        console.log('getAlbumsByArtist');
+        // console.log('getAlbumsByArtist');
         const albumsByArtist = artists.find(a => a['ID'] === artistID)['Albums'];
-        albumsByArtist.forEach(album => {
-            console.log(`album: ${album['Title']}`);
-            console.table(album);
-        });
+        // albumsByArtist.forEach(album => {
+        //     console.log(`album: ${album['Title']}`);
+        //     console.table(album);
+        // });
         return albumsByArtist;
     }
 
@@ -196,7 +178,11 @@ export default function ArtistView(props) {
                 pb: 2,
             }}
         >
-            <ArtistHeader artistName={artistName} dispatch={dispatch} />
+            <ArtistHeader
+                artistID={artistID}
+                artistName={artistName}
+                dispatch={dispatch}
+            />
             <Box
                 sx={{
                     height: '70%',

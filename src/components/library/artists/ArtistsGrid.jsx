@@ -10,7 +10,9 @@ import {
 
 import { click_on_artist_grid_item } from '../../../actions';
 
-import TychoImage from '../../../sample_images/tycho.png';
+import { getArtistArt } from '../../../config/album_art_paths';
+
+// import TychoImage from '../../../sample_images/tycho.png';
 
 
 const ALBUM_TILE_SIZE = 250; /* tmp */
@@ -60,8 +62,9 @@ function ArtistTile(props) {
                     alt='green iguana'
                 /> */}
                 <img
-                    src={TychoImage}
-                    alt="Tycho"
+                    // src={TychoImage}
+                    src={getArtistArt(artistID)}
+                    alt='artist'
                     width='120%'
                 />
             </Box>
