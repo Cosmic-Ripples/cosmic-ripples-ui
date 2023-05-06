@@ -2,7 +2,7 @@
  * @file MainDrawer.jsx
  */
 
-import React, { Fragment, useContext, useReducer } from 'react';
+import React, { Fragment, useReducer } from 'react';
 
 import {
     Box,
@@ -14,11 +14,13 @@ import {
     IconButton,
     Typography,
     CssBaseline,
+    // eslint-disable-next-line no-unused-vars
     List, ListItem, ListItemIcon, ListItemText,
 } from '@mui/material';
 
 import Hamburger from '@mui/icons-material/Menu';
 
+// eslint-disable-next-line no-unused-vars
 import { styled, useTheme } from '@mui/material/styles';
 
 import Search from './Search';
@@ -28,6 +30,7 @@ import {
 } from './MenuPresentationComponents';
 
 import {
+    // eslint-disable-next-line no-unused-vars
     PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR
 } from '../../config/color_palette';
 
@@ -83,10 +86,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 
 const TopBar = (props) => {
-    const {
-        open, toggleDrawer,
-        title, user, logoutAction,
-    } = props;
+    const { open, toggleDrawer, title, user, logoutAction } = props;
 
     return (
         <Fragment>
@@ -208,9 +208,9 @@ const ContainerListItems = (props) => {
 };
 
 
-const findSelectedComponent = (selectedMenuItem, test) => {
+const findSelectedComponent = (selectedMenuItem, propsPayload) => {
     const component = [
-        ...presentationComponents(test),
+        ...presentationComponents(propsPayload),
         ...containerComponents(),
     ].filter(comp => comp.title === selectedMenuItem);
 
@@ -313,16 +313,13 @@ function LeftBannerDrawer(props) {
 
 
 export default function MainDrawer(props) {
-    const {
-        title,
-        user,
-        logoutAction,
-
-        setNewQueueAndPlay,
-    } = props;
+    const { title, user, logoutAction, setNewQueueAndPlay } = props;
 
     const [state, dispatch] = useReducer(reducers, undefined, initialState);
     const { open, selectedMenuItem } = state;
+
+    /* props payload */
+    const payload = { ...state, setNewQueueAndPlay, dispatch };
 
     return (
         <Box sx={{ width: '100%', height: '90%', display: 'flex' }} >
@@ -343,7 +340,7 @@ export default function MainDrawer(props) {
             <MainContent open={open} >
                 <DrawerHeader />
                 <Box sx={{ width: '100%', height: '100%' }} >
-                    {findSelectedComponent(selectedMenuItem, { ...state, setNewQueueAndPlay, dispatch }).component}
+                    {findSelectedComponent(selectedMenuItem, payload).component}
                 </Box>
             </MainContent>
 

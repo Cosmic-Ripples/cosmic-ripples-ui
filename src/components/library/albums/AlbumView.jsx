@@ -10,19 +10,37 @@ import { PlayCircle } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
+import PropTypes from 'prop-types';
+
 import TracksTable from '../tracks/TracksTable';
 
-import { get_tracks_by_album, revisit_albums_view } from '../../../actions';
+import {
+    SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
+} from '../../../config/color_palette';
+
+import { get_tracks_by_album, revisit_albums_view, } from '../../../actions';
 
 import { getAlbumArt } from '../../../config/album_art_paths';
 
-import {
-    PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
-} from '../../../config/color_palette';
+import styled from '@mui/material/styles/styled';
+
+
+const AlbumImage = styled(Box)(({ albumid, theme }) => ({
+    width: '20%',
+    height: '100%',
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundImage: `url(${getAlbumArt(albumid)})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+}));
 
 
 function AlbumHeader(props) {
     const { albumName, albumID, dispatch } = props;
+    const { setNewQueueAndPlayCallBack } = props;
 
     return (
         <Stack direction='row'
@@ -39,79 +57,67 @@ function AlbumHeader(props) {
                 mb: 2,
             }}
         >
-            <Stack
-                sx={{
-                    height: '100%',
-                    width: '20%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                }}
-            >
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '100%',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        backgroundImage: `url(${getAlbumArt(albumID)})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                />
-            </Stack>
+            <AlbumImage albumid={albumID} />
             <Stack
                 sx={{
                     height: '100%',
                     width: '50%',
                     display: 'flex',
-                    justifyContent: 'flex-end',
+                    justifyContent: 'space-between',
                     alignItems: 'flex-start',
+                    ml: 2,
                 }}
             >
-                <Stack aria-label='previous/next view buttons'
-                    direction='row'
+                <Stack direction='column'
                     sx={{
-                        width: '35%',
-                        height: '20%',
-                        // opacity: 0.9,
-                        // borderRadius: 3,
+                        height: '100%',
+                        width: '100%',
                         display: 'flex',
                         justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        backgroundColor: SECONDARY_COLOR,
+                        alignItems: 'flex-start',
                     }}
                 >
-                    <IconButton aria-label='previous view'
-                        onClick={() => { dispatch(revisit_albums_view()); }}
+                    <Stack aria-label='previous/next view buttons'
+                        direction='row'
+                        sx={{
+                            height: '25%',
+                            width: '10%',
+                            // opacity: 0.9,
+                            // borderRadius: 3,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: SECONDARY_COLOR,
+                        }}
                     >
-                        <ChevronLeftIcon
-                            sx={{ color: TERTIARY_COLOR, fontSize: 40 }}
-                        />
-                    </IconButton>
-                    <IconButton aria-label='next view'
-                        onClick={() => { console.log('TODO: go to album view ?'); }}
+                        <IconButton aria-label='previous view'
+                            onClick={() => { dispatch(revisit_albums_view()); }}
+                        >
+                            <ChevronLeftIcon
+                                sx={{ color: TERTIARY_COLOR, fontSize: 40 }}
+                            />
+                        </IconButton>
+                        <IconButton aria-label='next view'
+                            onClick={() => { console.log('TODO: go to album view ?'); }}
+                        >
+                            <ChevronRightIcon
+                                sx={{ color: TERTIARY_COLOR, fontSize: 40, }}
+                            />
+                        </IconButton>
+                    </Stack>
+                    <Typography variant='h4'
+                        sx={{
+                            textAlign: 'left',
+                            fontWeight: 'bold',
+                            color: QUATERNARY_COLOR,
+                        }}
                     >
-                        <ChevronRightIcon
-                            sx={{ color: TERTIARY_COLOR, fontSize: 40, }}
-                        />
-                    </IconButton>
+                        {albumName}
+                    </Typography>
                 </Stack>
 
-                <Typography variant='h4'
-                    sx={{
-                        textAlign: 'left',
-                        fontWeight: 'bold',
-                        color: QUATERNARY_COLOR,
-                    }}
-                >
-                    {albumName}
-                </Typography>
-
                 <IconButton aria-label='play album'
-                    onClick={() => { console.log('TODO: play album'); }}
+                    onClick={() => { setNewQueueAndPlayCallBack(); }}
                 >
                     <PlayCircle
                         sx={{ color: QUATERNARY_COLOR, fontSize: 40, }}
@@ -131,9 +137,10 @@ function AlbumHeader(props) {
  * @returns {JSX.Element} - Box containing AlbumHeader and TracksTable.
  */
 export default function AlbumView(props) {
-    const { albumName, albumID, artists, tracks, dispatch } = props;
+    const { albumName, albumID, dispatch } = props;
+    const { artists, tracks } = props; /* want to get rid of these */
+    const { setNewQueueAndPlay } = props;
 
-    // setNewQueueAndPlayCallBack
 
     useEffect(() => {
         async function getTracks() {
@@ -143,10 +150,12 @@ export default function AlbumView(props) {
         getTracks();
     }, [albumID, artists, dispatch]);
 
+
     const getTracksByAlbum = (albumID) => {
         const album = tracks?.filter((track) => track.Album_ID === albumID);
         return album;
     };
+
 
     return (
         <Box
@@ -156,8 +165,11 @@ export default function AlbumView(props) {
                 pb: 4,
             }}
         >
-            <AlbumHeader albumName={albumName} albumID={albumID}
+            <AlbumHeader
+                albumID={albumID}
+                albumName={albumName}
                 dispatch={dispatch}
+                setNewQueueAndPlayCallBack={() => setNewQueueAndPlay(tracks, 0)}
             />
             <Box
                 sx={{
@@ -170,10 +182,18 @@ export default function AlbumView(props) {
             >
                 <TracksTable
                     tracks={getTracksByAlbum(albumID)}
-                    artists={artists}
+                    setNewQueueAndPlay={setNewQueueAndPlay}
                     dispatch={dispatch}
                 />
             </Box>
         </Box>
     );
 }
+AlbumView.propTypes = {
+    albumID: PropTypes.number.isRequired,
+    albumName: PropTypes.string.isRequired,
+    artists: PropTypes.array,
+    tracks: PropTypes.array,
+    dispatch: PropTypes.func.isRequired,
+    setNewQueueAndPlay: PropTypes.func.isRequired,
+};

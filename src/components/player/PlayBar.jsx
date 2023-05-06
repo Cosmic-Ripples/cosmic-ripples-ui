@@ -11,18 +11,20 @@ import { Box, Stack, Slider, IconButton, Typography } from '@mui/material';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
-import { getAlbumArt } from '../../config/album_art_paths';
-
 import {
+    PlayOrPauseButton,
+    SkipBackButton,
+    SkipForwardButton,
+    RewindButton,
+    FastForwardButton,
     playerButtonStyle,
-    SkipBackButton, PlayOrPauseButton, SkipForwardButton, RewindButton, FastForwardButton
 } from './PlayBackButtons';
 
 import {
-    PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
+    SECONDARY_COLOR, QUATERNARY_COLOR,
 } from '../../config/color_palette';
 
-import TychoImage from '../../sample_images/tycho.png';
+import { getAlbumArt } from '../../config/album_art_paths';
 
 
 const DEBUG = false;
@@ -45,11 +47,14 @@ const DEBUG = false;
  * followed by a vertical Stack of the track's title and artist.
  */
 function CurrentTrackInfo(props) {
-    const { title, artist, albumID, dispatch } = props;
-    console.log("title: ", title);
-    console.log("artist: ", artist);
-    console.log("albumID: ", albumID);
-    console.log(getAlbumArt(albumID));
+    const { title, artist, albumID } = props;
+
+    /* console.log here prevents other views from utilizing console.log */
+    // console.log("title: ", title);
+    // console.log("artist: ", artist);
+    // console.log("albumID: ", albumID);
+    // console.log(getAlbumArt(albumID));
+
     return (
         <Stack aria-label='playbar track info'
             direction='row'
@@ -64,8 +69,13 @@ function CurrentTrackInfo(props) {
                 borderColor: 'yellow',
             }}
         >
-            <img src={getAlbumArt(albumID)} alt='Tycho' loading='lazy' width='15%' />
-            <Stack>
+            <img
+                src={getAlbumArt(albumID)}
+                alt='Tycho'
+                loading='lazy'
+                width='15%'
+            />
+            <Stack sx={{ ml: 2 }} >
                 <Typography aria-label='track title'
                     variant='h7'
                     component='div'
@@ -427,7 +437,7 @@ export default function PlayBar(props) {
             }}
         >
 
-            <CurrentTrackInfo title={title} artist={artist} albumID={albumID}/>
+            <CurrentTrackInfo title={title} artist={artist} albumID={albumID} />
             <PlayBackControls
                 playOrPauseAudio={playOrPauseAudio}
                 paused={paused}

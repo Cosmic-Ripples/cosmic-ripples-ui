@@ -27,9 +27,10 @@ import { setAlbums, setArtists } from '../../../actions';
  */
 export default function AlbumsView(props) {
     const { selectedAlbum, artists, albums, tracks, dispatch } = props;
+    const { setNewQueueAndPlay } = props;
 
     useEffect(() => {
-        const checkSanity = true;
+        const checkSanity = false;
         checkSanity && console.log('called useEffect');
 
         async function getAlbums() {
@@ -38,18 +39,11 @@ export default function AlbumsView(props) {
             const api = new Soren();
             const artistsJSONString = await api.allArtists();
             dispatch(setArtists(artistsJSONString.data));
-
-            /*
-            Only using 'artists' for debugging...
-            Note that using 'artists' will result in a loop (closure ?) on
-            artists and dispatch, causing useEffect to endlessly call the API.
-            */
-            // dispatch(setAlbums(artists));
             dispatch(setAlbums(artistsJSONString.data));
         }
 
         if (!artists || !albums) {
-        getAlbums();
+            getAlbums();
         }
     }, [artists, albums, dispatch]);
 
@@ -66,6 +60,7 @@ export default function AlbumsView(props) {
                 artists={artists}
                 tracks={tracks}
                 dispatch={dispatch}
+                setNewQueueAndPlay={setNewQueueAndPlay}
             />
         ) : (
             <Albums albums={albums} dispatch={dispatch} />

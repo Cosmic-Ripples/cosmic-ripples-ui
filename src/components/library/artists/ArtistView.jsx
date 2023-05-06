@@ -6,6 +6,8 @@ import React, { useEffect } from 'react';
 
 import { Box, Stack, IconButton, Typography } from '@mui/material';
 
+import Soren from '../../../api_interface/API_Interface';
+
 import { PlayCircle } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -16,12 +18,11 @@ import {
     PRIMARY_COLOR, SECONDARY_COLOR, TERTIARY_COLOR, QUATERNARY_COLOR,
 } from '../../../config/color_palette';
 
-import {
-    revisit_artists_view,
-    get_albums_by_artist,
-} from '../../../actions';
+import { setArtists, revisit_artists_view } from '../../../actions';
 
-import TychoImage from '../../../sample_images/tycho.png';
+import { getArtistArt } from '../../../config/album_art_paths';
+
+import styled from '@mui/material/styles/styled';
 
 
 // const ArtistHeader = styled(Stack)(({ theme }) => ({
@@ -38,8 +39,21 @@ import TychoImage from '../../../sample_images/tycho.png';
 // }));
 
 
+const ArtistImage = styled(Box)(({ artistid, theme }) => ({
+    width: '20%',
+    height: '100%',
+    overflow: 'hidden',
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    backgroundImage: `url(${getArtistArt(artistid)})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+}));
+
+
 function ArtistHeader(props) {
-    const { artistName, dispatch } = props;
+    const { artistID, artistName, dispatch } = props;
 
     return (
         <Stack direction='row'
@@ -56,85 +70,64 @@ function ArtistHeader(props) {
                 mb: 2,
             }}
         >
-            <Stack
-                sx={{
-                    height: '100%',
-                    width: '20%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'flex-start',
-                }}
-            >
-                <Box
-                    sx={{
-                        width: '100%',
-                        height: '100%',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        backgroundImage: `url(${TychoImage})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                >
-
-                    {/* <img
-                        src={TychoImage}
-                        alt='album cover'
-                        display='inline-block'
-                        height='150'
-                        width='150'
-                    /> */}
-                </Box>
-            </Stack>
+            <ArtistImage artistid={artistID} />
             <Stack
                 sx={{
                     height: '100%',
                     width: '50%',
                     display: 'flex',
-                    justifyContent: 'flex-end',
+                    justifyContent: 'space-between',
                     alignItems: 'flex-start',
+                    ml: 2,
                 }}
             >
-                <Stack aria-label='previous/next view buttons'
-                    direction='row'
+                <Stack direction='column'
                     sx={{
-                        width: '35%',
-                        height: '20%',
-                        // opacity: 0.9,
-                        // borderRadius: 3,
+                        height: '100%',
+                        width: '100%',
                         display: 'flex',
                         justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        backgroundColor: SECONDARY_COLOR,
+                        alignItems: 'flex-start',
                     }}
                 >
-                    <IconButton aria-label='previous view'
-                        onClick={() => { dispatch(revisit_artists_view()); }}
+                    <Stack aria-label='previous/next view buttons'
+                        direction='row'
+                        sx={{
+                            height: '25%',
+                            width: '10%',
+                            // opacity: 0.9,
+                            // borderRadius: 3,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: SECONDARY_COLOR,
+                        }}
                     >
-                        <ChevronLeftIcon
-                            sx={{ color: TERTIARY_COLOR, fontSize: 40 }}
-                        />
-                    </IconButton>
-                    <IconButton aria-label='next view'
-                        onClick={() => { console.log('TODO: go to album view ?'); }}
+                        <IconButton aria-label='previous view'
+                            onClick={() => { dispatch(revisit_artists_view()); }}
+                        >
+                            <ChevronLeftIcon
+                                sx={{ color: TERTIARY_COLOR, fontSize: 40 }}
+                            />
+                        </IconButton>
+                        <IconButton aria-label='next view'
+                            onClick={() => { console.log('TODO: go to album view ?'); }}
+                        >
+                            <ChevronRightIcon
+                                sx={{ color: TERTIARY_COLOR, fontSize: 40, }}
+                            />
+                        </IconButton>
+                    </Stack>
+                    <Typography variant='h4'
+                        sx={{
+                            textAlign: 'left',
+                            fontWeight: 'bold',
+                            color: QUATERNARY_COLOR,
+                        }}
                     >
-                        <ChevronRightIcon
-                            sx={{ color: TERTIARY_COLOR, fontSize: 40, }}
-                        />
-                    </IconButton>
+                        {artistName}
+                    </Typography>
                 </Stack>
-
-                <Typography variant='h4'
-                    sx={{
-                        textAlign: 'left',
-                        fontWeight: 'bold',
-                        color: QUATERNARY_COLOR,
-                    }}
-                >
-                    {artistName}
-                </Typography>
 
                 <IconButton aria-label='play album'
                     onClick={() => { console.log('TODO: play album'); }}
@@ -150,23 +143,35 @@ function ArtistHeader(props) {
 
 
 export default function ArtistView(props) {
-    const { artistName, artistID, artists, albums, dispatch } = props;
+    const { artistID, artistName, artists, dispatch } = props;
 
-    // setNewQueueAndPlayCallBack
 
     useEffect(() => {
-        async function getAlbums() {
-            dispatch(get_albums_by_artist(artistID, artists));
+        const checkSanity = false;
+        checkSanity && console.log('called useEffect');
+
+        async function getArtists() {
+            checkSanity && console.log('called async getAlbums()');
+
+            const api = new Soren();
+            const artistsJSONString = await api.allArtists();
+            dispatch(setArtists(artistsJSONString.data));
         }
 
-        /* TODO: Toss in the album art here ? */
-        getAlbums();
+        if (!artists) {
+            getArtists();
+        }
+    }, [artists, dispatch]);
 
-    }, [artistID, artists, dispatch]);
-
-    /* Get Artist Image (here or in ArtistHeader */
-
-    /* If not get album art in above useEffect, get here and add to albums */
+    function getAlbumsByArtist(artistID) { // :(
+        // console.log('getAlbumsByArtist');
+        const albumsByArtist = artists.find(a => a['ID'] === artistID)['Albums'];
+        // albumsByArtist.forEach(album => {
+        //     console.log(`album: ${album['Title']}`);
+        //     console.table(album);
+        // });
+        return albumsByArtist;
+    }
 
     return (
         <Box
@@ -177,7 +182,11 @@ export default function ArtistView(props) {
                 pb: 2,
             }}
         >
-            <ArtistHeader artistName={artistName} dispatch={dispatch} />
+            <ArtistHeader
+                artistID={artistID}
+                artistName={artistName}
+                dispatch={dispatch}
+            />
             <Box
                 sx={{
                     height: '70%',
@@ -188,7 +197,7 @@ export default function ArtistView(props) {
             >
                 <AlbumsGrid
                     artistName={artistName}
-                    albums={albums}
+                    albums={getAlbumsByArtist(artistID)}
                     dispatch={dispatch}
                 />
             </Box>
