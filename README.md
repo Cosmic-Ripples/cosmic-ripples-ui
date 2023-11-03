@@ -1,29 +1,3 @@
-# BUGS !!!
-
-- ## Unresolved:
-
-  - INCOMING...
-
-- ## Resolved:
-
-  - ### Fixed X using Y:
-
-    - **Fixed** lingering state for the following user navigation sequence:
-      - User clicks on **Albums** within the side bar, rendering the **Albums View** which defaults to an **Albums Grid**.
-      - User clicks on an **Album Grid Item** _Houses of the Holy_, rendering the **Album View**, to display a header for the album and a table of tracks for that album.
-      - User clicks on **Artists** within the side bar, rendering the **Artists View** which defaults to an **Artists Grid**.
-      - User clicks on an **Artist Grid Item** _Pink Floyd_, rendering... UH OH, you expected the **Artist View** for _Pink Floyd_ to be rendered, displaying the artist header followed by a grid of their albums but instead you found an **Album View** for _Houses of the Holy_ showing its album header followed by a table of tracks from the album!
-    - **using** the CLICK_ON_MENU_ITEM action to set the selectedAlbum and selectedArtist to null.
-    - **Fixed** long _Current Track Info_ track titles forcing the image off the left of the playback bar and screen...
-    - **using** a new playbar container and elements layout, splitting the three clusters of interactable into three sections, calculating a better width percentage distribution between the three (30-40-30) and using flex properties of the three sections to maintain alignment.
-
-# Concerns & Ideas
-
-- Images from the database to be sent over with all the other metadata ?
-- Client-side caching with `import cache from './cahce';` ?
-- Playback bar being so far outside the main content area ?
-- Don't restart audio on browser refresh ?
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
